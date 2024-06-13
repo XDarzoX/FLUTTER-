@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'analyze_chat.dart';
+
+void main() {
+  runApp(const ChatAnalyzerApp());
+}
+
+class ChatAnalyzerApp extends StatelessWidget {
+  const ChatAnalyzerApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Chat Analyzer',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: const MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _personController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+
+  void _analyzeChat() {
+    final chat = _controller.text;
+    final person = _personController.text;
+    final amount = int.tryParse(_amountController.text) ?? 0;
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => AnalyzeChatPage(
+          chat: chat,
+          person: person,
+          amount: amount,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Chat Analyzer'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _controller,
+              maxLines: 5,
+              decoration: const InputDecoration(
+                labelText: 'Enter the chat',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _personController,
+              decoration: const InputDecoration(
+                labelText: 'Person to analyze',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: _amountController,
+              decoration: const InputDecoration(
+                labelText: 'Number of suggestions',
+                border: OutlineInputBorder(),
+              ),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _analyzeChat,
+              child: const Text('Analyze Chat'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
